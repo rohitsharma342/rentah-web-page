@@ -79,7 +79,7 @@ function App() {
                       <p className='text-center'>Please download Rentah app from App Store or Google play store for direct and kickstarting conversation.</p>
                     </div>
                     <div className="modal-footer">
-                      {os==="iPhone"?
+                      {os==="Windows"?
                       <a href='http://brainboxapps.com'  className='form-control btn btn-success' >Continue</a>
                       :
                       <a href="http://google.com" className='form-control btn btn-success' >Continue</a>
