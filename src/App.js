@@ -5,10 +5,10 @@ function App() {
     let userAgent= window.navigator.userAgent
     let platform= window.navigator?.userAgentData?.platform
     if(platform=="Windows"){
-        setOs(platform)
+        setOs("Windows")
     }
     else if(platform =="iPhone"){
-      setOs(platform)
+      setOs("iPhone")
     }
   }
 
