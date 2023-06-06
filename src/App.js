@@ -80,13 +80,14 @@ function App() {
                       <h5 className="modal-title" id="exampleModalLabel">Rentah</h5>
                       <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
+                     
                     <div className="modal-body">
                       <img src='../rentah_logo.png' className='rentah-logo'/>
                       <h3 className='text-center mt-3'>Thanks For Your Intrest</h3>
                       <p className='text-center'>Please download Rentah app from App Store or Google play store for direct and kickstarting conversation.</p>
                     </div>
                     <div className="modal-footer">
-                      {os==="Windows"?
+                      {os==="ios"?
                       <a href='http://brainboxapps.com'  className='form-control btn btn-success' >Continue</a>
                       :
                       <a href="http://google.com" className='form-control btn btn-success' >Continue</a>
