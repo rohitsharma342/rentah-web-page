@@ -19,7 +19,7 @@ function App() {
   return (
     <>
       <section>
-        <div className='container'>
+        <div className='container-fluid'>
           <div className='row'>
             <div className='col-md-12'>
               <div className="header "><img src='../rentah_logo.png' className='rentah-logo-header'/> Rentah</div>
