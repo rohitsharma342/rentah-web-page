@@ -21,8 +21,9 @@ function App() {
       <section>
         <div className='container-fluid'>
           <div className='row'>
+          <div className="header "><img src='../rentah_logo.png' className='rentah-logo-header'/> Rentah</div>
             <div className='col-md-12'>
-              <div className="header "><img src='../rentah_logo.png' className='rentah-logo-header'/> Rentah</div>
+              
               <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-indicators">
                   <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
