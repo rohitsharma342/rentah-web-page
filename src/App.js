@@ -5,7 +5,10 @@ function App() {
     let userAgent= window.navigator.userAgent
     let platform= window.navigator?.userAgentData?.platform
     if(platform=="Windows"){
-        alert("hello windows")
+        setOs(platform)
+    }
+    else if(platform =="iPhone"){
+      setOs(platform)
     }
   }
 
@@ -76,8 +79,11 @@ function App() {
                       <p className='text-center'>Please download Rentah app from App Store or Google play store for direct and kickstarting conversation.</p>
                     </div>
                     <div className="modal-footer">
-                      
-                      <a  className='form-control btn btn-success' >Continue</a>
+                      {os==="iPhone"?
+                      <a href='http://brainboxapps.com'  className='form-control btn btn-success' >Continue</a>
+                      :
+                      <a href="http://google.com" className='form-control btn btn-success' >Continue</a>
+  }
                     </div>
                   </div>
                 </div>
