@@ -1,4 +1,7 @@
 import { useState } from "react"
+
+import GoogleMap from "./GoogleMap"
+import GoogleMapC from "./GoogleMap"
 function App() {
   const [os,setOs] = useState("")
   function handleClick(){
@@ -45,9 +48,9 @@ function App() {
                   <span class="visually-hidden">Next</span>
                 </button>
               </div>
-              <div className='rounded bg-grey'>
-                <h2>$900/day</h2>
-                <p className='float-end' style={{ marginTop : "-40px" }}>jaipur,Rajasthan</p>
+              <div className='rounded bg-grey mt-3'>
+                <h3>$900/day</h3>
+                <p className='float-end' style={{ marginTop : "-40px" }}><i class="bi bi-geo-alt-fill"></i> jaipur,Rajasthan</p>
                 <p>Renting My Camera</p>
                 <hr />
                 <h2>Description</h2>
@@ -58,19 +61,21 @@ function App() {
                 <h3><i class="bi bi-clipboard2-data-fill"></i> Return Policy</h3>
                 <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here'</p>
                 <button className='btn btn-success form-control rounded' data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={handleClick}>Rent It</button>
-                <img src='https://developers.google.com/static/maps/images/landing/hero_maps_static_api.png' className='mt-3'></img>
+                <GoogleMapC
+                
+                />
                 <hr />
-                <div>
+                <div className="mb-5">
                   <img src='https://t4.ftcdn.net/jpg/03/64/21/11/360_F_364211147_1qgLVxv1Tcq0Ohz3FawUfrtONzz8nq3e.jpg' className='profile-img' />
-                  <h4 style={{ marginLeft  : "120px", marginTop : "-80px" }}>Listed By Rohit Sharma</h4>
+                  <h5 style={{ marginLeft  : "120px", marginTop : "-65px" }}>Listed By Rohit Sharma</h5>
                   <p style={{ marginLeft : "120px", marginTop : "0px" }}>Member Since 2018</p>
                 </div>
               </div>
               <div className="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div className="modal-dialog rounded">
+                <div className="modal-dialog ">
                   <div className="modal-content">
                     <div className="modal-header">
-                      <h5 className="modal-title" id="exampleModalLabel">Modal title</h5>
+                      <h5 className="modal-title" id="exampleModalLabel">Rentah</h5>
                       <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div className="modal-body">
