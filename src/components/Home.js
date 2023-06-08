@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { BrowserRouter as Router ,Route ,Routes, useParams } from 'react-router-dom'
 import GoogleMap from "../GoogleMap"
 import GoogleMapC from "../GoogleMap"
@@ -6,18 +6,38 @@ import Header from "../components/Header"
 function Home() {
         const {id} =useParams()
         const [os,setOs] = useState("")
-
-       console.log(id)
+         const[list,setList]=useState([])
+         const[req,setRequest]=useState([])
+         useEffect(()=>{
+          fetch(`http://24.199.104.72/api/listings/${id}`)
+          .then((res)=>{ return res.json()})
+          .then(response=>{
+           if(response.message=="Listing exists"){
+              setList(response.data)
+           }
+          })
+         },[])
+     
 
         function handleClick(){
-          let userAgent= window.navigator.userAgent
-          let platform= window.navigator?.userAgentData?.platform
-          if(platform=="Windows"){
-              setOs("Windows")
-          }
-          else if(platform =="iPhone"){
-            setOs("iPhone")
-          }
+          // let userAgent= window.navigator.userAgent
+          // let platform= window.navigator?.userAgentData?.platform
+          // if(platform=="Windows"){
+          //     setOs("Windows")
+          // }
+          // else if(platform =="iPhone"){
+          //   setOs("iPhone")
+          // }
+          var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+          if (/windows phone/i.test(userAgent)) {
+            setOs("W")
+        }
+        if (/android/i.test(userAgent)) {
+          setOs("A")
+      }
+      if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+        setOs("I")
+    }
         }
       
     return (
@@ -91,7 +111,7 @@ function Home() {
                       <p className='text-center'>Please download Rentah app from App Store or Google play store for direct and kickstarting conversation.</p>
                     </div>
                     <div className="modal-footer">
-                      {os==="ios"?
+                      {os==="I"?
                       <a href='http://brainboxapps.com'  className='form-control btn btn-success' >Continue</a>
                       :
                       <a href="http://google.com" className='form-control btn btn-success' >Continue</a>
