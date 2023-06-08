@@ -7,7 +7,7 @@ function Home() {
         const {id} =useParams()
         const [os,setOs] = useState("")
 
-        
+       console.log(id)
 
         function handleClick(){
           let userAgent= window.navigator.userAgent
