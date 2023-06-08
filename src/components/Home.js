@@ -111,11 +111,12 @@ function Home() {
                       <p className='text-center'>Please download Rentah app from App Store or Google play store for direct and kickstarting conversation.</p>
                     </div>
                     <div className="modal-footer">
-                      {os==="I"?
-                      <a href='http://brainboxapps.com'  className='form-control btn btn-success' >Continue</a>
-                      :
-                      <a href="http://google.com" className='form-control btn btn-success' >Continue</a>
-  }
+                      {os==="I" && <a href='http://brainboxapps.com'  className='form-control btn btn-success' >Continue</a>}
+                      {os==="A" && <a href="http://google.com" className='form-control btn btn-success' >Continue</a>}
+                      
+                      
+                      
+ 
                     </div>
                   </div>
                 </div>
