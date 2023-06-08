@@ -38,6 +38,9 @@ function Home() {
       if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
         setOs("I")
     }
+    if(/windows/i.test(userAgent)){
+      setOs("W")
+    }
         }
       
     return (
@@ -86,7 +89,7 @@ function Home() {
                 <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for</p>
                 <h3><i class="bi bi-clipboard2-data-fill"></i> Return Policy</h3>
                 <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here'</p>
-                <button className='btn btn-success form-control rounded' data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={handleClick}>Rent It</button>
+                <button className='btn btn-success form-control rounded' data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={handleClick}>I'm Intrested</button>
                 <GoogleMapC
                 
                 />
@@ -112,11 +115,9 @@ function Home() {
                     </div>
                     <div className="modal-footer">
                       {os==="I" && <a href='https://www.apple.com/in/app-store'  className='form-control btn btn-success' >Continue</a>}
-                      {os==="A" && <a href="https://play.google.com/store/apps" className='form-control btn btn-success' >Continue</a>}
+                      {os==="A" && <a href="https://play.google.com/store/search?q=rentah&c=apps" className='form-control btn btn-success' >Continue</a>}
+                      {os==="W" && <a href="https://play.google.com/store/search?q=rentah&c=apps" className='form-control btn btn-success' >Continue</a>}
                       
-                      
-                      
- 
                     </div>
                   </div>
                 </div>
