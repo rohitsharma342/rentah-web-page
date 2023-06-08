@@ -8,15 +8,15 @@ function Home() {
         const [os,setOs] = useState("")
          const[list,setList]=useState([])
          const[req,setRequest]=useState([])
-         useEffect(()=>{
-          fetch(`http://24.199.104.72/api/listings/${id}`)
-          .then((res)=>{ return res.json()})
-          .then(response=>{
-           if(response.message=="Listing exists"){
-              setList(response.data)
-           }
-          })
-         },[])
+        //  useEffect(()=>{
+        //   fetch(`http://24.199.104.72/api/listings/${id}`)
+        //   .then((res)=>{ return res.json()})
+        //   .then(response=>{
+        //    if(response.message=="Listing exists"){
+        //       setList(response.data)
+        //    }
+        //   })
+        //  },[])
      
 
         function handleClick(){
