@@ -1,22 +1,30 @@
 import { useEffect, useState } from "react"
-import { BrowserRouter as Router ,Route ,Routes, useParams } from 'react-router-dom'
-import GoogleMap from "../GoogleMap"
+import {  useParams } from 'react-router-dom'
+// import GoogleMap from "../GoogleMap"
 import GoogleMapC from "../GoogleMap"
 import Header from "../components/Header"
 function Home() {
         const {id} =useParams()
         const [os,setOs] = useState("")
          const[list,setList]=useState([])
-         const[req,setRequest]=useState([])
-        //  useEffect(()=>{
-        //   fetch(`http://24.199.104.72/api/listings/${id}`)
-        //   .then((res)=>{ return res.json()})
-        //   .then(response=>{
-        //    if(response.message=="Listing exists"){
-        //       setList(response.data)
-        //    }
-        //   })
-        //  },[])
+         const[request,setRequest]=useState([])
+         useEffect(()=>{
+          fetch(`http://24.199.104.72/api/listings/${id}`)
+          .then((res)=>{ return res.json()})
+          .then(response=>{
+           if(response.status===true){
+              setList(response.data)
+           }
+          })
+
+          fetch(`http://24.199.104.72/api/user-requests/${id}`)
+          .then((res)=>{ return res.json()})
+          .then(response=>{
+           if(response.status===true){
+              setRequest(response.data)
+           }
+          })
+         },[id])
      
 
         function handleClick(){
@@ -42,7 +50,13 @@ function Home() {
       setOs("W")
     }
         }
-      
+        
+      if(list.length!==0){
+        
+      }
+      if(request.length!==0){
+
+      }
     return (
         <>
         <section>
@@ -59,13 +73,13 @@ function Home() {
                 </div>
                 <div class="carousel-inner">
                   <div class="carousel-item active">
-                    <img src="https://cdn.britannica.com/67/92867-050-BC3DC984/cameras-camera-reviews-crystal-displays-photographs-film.jpg" class="d-block w-100" alt="..." />
+                    <img src="https://cdn.britannica.com/67/92867-050-BC3DC984/cameras-camera-reviews-crystal-displays-photographs-film.jpg" class="d-block w-100" alt="" />
                   </div>
                   <div class="carousel-item">
-                    <img src="https://rukminim1.flixcart.com/flap/850/400/image/7c9975f767d61c6c.jpg?q=90" class="d-block w-100" alt="..." />
+                    <img src="https://rukminim1.flixcart.com/flap/850/400/image/7c9975f767d61c6c.jpg?q=90" class="d-block w-100" alt="" />
                   </div>
                   <div class="carousel-item">
-                    <img src="https://imgeng.jagran.com/images/2023/mar/Best%20Cameras%20For%20Photography16691861357791678962439662.jpg" class="d-block w-100" alt="..." />
+                    <img src="https://imgeng.jagran.com/images/2023/mar/Best%20Cameras%20For%20Photography16691861357791678962439662.jpg" class="d-block w-100" alt="" />
                   </div>
                 </div>
                 <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
@@ -95,7 +109,7 @@ function Home() {
                 />
                 <hr />
                 <div className="mb-5">
-                  <img src='https://t4.ftcdn.net/jpg/03/64/21/11/360_F_364211147_1qgLVxv1Tcq0Ohz3FawUfrtONzz8nq3e.jpg' className='profile-img' />
+                  <img src='https://t4.ftcdn.net/jpg/03/64/21/11/360_F_364211147_1qgLVxv1Tcq0Ohz3FawUfrtONzz8nq3e.jpg' className='profile-img' alt=""/>
                   <h5 style={{ marginLeft  : "120px", marginTop : "-65px" }}>Listed By Rohit Sharma</h5>
                   <p style={{ marginLeft : "120px", marginTop : "0px" }}>Member Since 2018</p>
                 </div>
@@ -109,7 +123,7 @@ function Home() {
                     </div>
                      
                     <div className="modal-body">
-                      <img src='../rentah_logo.png' className='rentah-logo'/>
+                      <img src='../rentah_logo.png' className='rentah-logo' alt=""/>
                       <h3 className='text-center mt-3'>Thanks For Your Intrest</h3>
                       <p className='text-center'>Please download Rentah app from App Store or Google play store for direct and kickstarting conversation.</p>
                     </div>

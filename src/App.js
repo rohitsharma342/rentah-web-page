@@ -1,8 +1,8 @@
-import { useState } from "react"
+// import { useState } from "react"
 import { BrowserRouter as Router ,Route ,Routes } from 'react-router-dom'
-import GoogleMap from "./GoogleMap"
-import GoogleMapC from "./GoogleMap"
-import Header from "./components/Header"
+// import GoogleMap from "./GoogleMap"
+// import GoogleMapC from "./GoogleMap"
+// import Header from "./components/Header"
 import Home from "./components/Home"
 
 function App() {
@@ -11,7 +11,7 @@ function App() {
       <>
       <Router>
         <Routes>
-          <Route path="/" element={<Home/>}></Route>
+          <Route path="/:id" element={<Home/>}></Route>
         </Routes>
       </Router>
       </>
