@@ -55,16 +55,8 @@ console.log(id)
     }
         }
         
-      if(list.length!==0){
-        
-      }
+      
       if(request.length!==0){
-
-      }
-      if(request!==[]){
-
-      
-      
     return (
         <>
         <section>
@@ -116,7 +108,7 @@ console.log(id)
                 <hr />
                 <div className="mb-5">
                   <img src={request.user?.profilePicture} className='profile-img' alt=""/>
-                  <h5 style={{ marginLeft  : "120px", marginTop : "-65px" }}>Listed By {request.user?.fullName}</h5>
+                  <h5 style={{ marginLeft  : "120px", marginTop : "-65px" }}>Request By {request.user?.fullName}</h5>
                   <p style={{ marginLeft : "120px", marginTop : "0px" }}>Member Since 2018</p>
                 </div>
               </div>
@@ -148,9 +140,8 @@ console.log(id)
       </section>
         </>
      );
-
     }
-     if(list!==[]){
+     if(list.length!==0){
       return (
         <>
         <section>
