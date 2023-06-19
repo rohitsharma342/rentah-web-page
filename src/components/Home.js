@@ -99,7 +99,7 @@ console.log(id)
               </div>
               <div className='rounded bg-grey mt-3'>
                 <h3>${request.budget}</h3>
-                <p className='float-end' style={{ marginTop : "-40px" }}><i class="bi bi-geo-alt-fill"></i>{request.user.city},{request.user.state}</p>
+                <p className='float-end' style={{ marginTop : "-40px" }}><i class="bi bi-geo-alt-fill"></i>{request.user?.city},{request.user?.state}</p>
                 <p>Selling My {request.title}</p>
                 <hr />
                 <h2>Description</h2>
@@ -115,8 +115,8 @@ console.log(id)
                 />
                 <hr />
                 <div className="mb-5">
-                  <img src={request.user.profilePicture} className='profile-img' alt=""/>
-                  <h5 style={{ marginLeft  : "120px", marginTop : "-65px" }}>Listed By {request.user.fullName}</h5>
+                  <img src={request.user?.profilePicture} className='profile-img' alt=""/>
+                  <h5 style={{ marginLeft  : "120px", marginTop : "-65px" }}>Listed By {request.user?.fullName}</h5>
                   <p style={{ marginLeft : "120px", marginTop : "0px" }}>Member Since 2018</p>
                 </div>
               </div>
@@ -190,7 +190,7 @@ console.log(id)
                 :
                 <h3>${list.budget}</h3>
     }
-                <p className='float-end' style={{ marginTop : "-40px" }}><i class="bi bi-geo-alt-fill"></i> jaipur,Rajasthan</p>
+                <p className='float-end' style={{ marginTop : "-40px" }}><i class="bi bi-geo-alt-fill"></i> {list.user?.city},{list.user?.state}</p>
                 {list.listingType==0?
                 <p>Renting My {list.title}</p>
                 :
@@ -211,8 +211,8 @@ console.log(id)
                 />
                 <hr />
                 <div className="mb-5">
-                  <img src='' className='profile-img'alt="" />
-                  <h5 style={{ marginLeft  : "120px", marginTop : "-65px" }}>Listed By {list.user.fullName}</h5>
+                  <img src={list.user?.profilePicture} className='profile-img'alt="" />
+                  <h5 style={{ marginLeft  : "120px", marginTop : "-65px" }}>Listed By {list.user?.fullName}</h5>
                   <p style={{ marginLeft : "120px", marginTop : "0px" }}>Member Since 2018</p>
                 </div>
               </div>
