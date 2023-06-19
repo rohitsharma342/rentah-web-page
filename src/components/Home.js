@@ -13,27 +13,27 @@ function Home() {
           fetch(`http://24.199.104.72/api/listings/${id}`)
           .then((res)=>{ return res.json()})
           .then(response=>{
-           if(response.status=true){
+           if(response.status==true){
               setList(response.data)
-              console.log(list)
-           }if(response.status=false){
+              // console.log(list)
+           }if(response.status===false){
             setList([])
            }
           })
 
-         },[list])
+         },[])
          useEffect(()=>{
           
           fetch(`http://24.199.104.72/api/user-requests/${id}`)
           .then((res)=>{ return res.json()})
           .then(response=>{
-           if(response.status=true){
+           if(response.status===true){
               setRequest(response.data)
-           }if(response.status=false){
+           }if(response.status==false){
             setRequest([])
            }
           })
-         },[request])
+         },[])
      
 
         function handleClick(){
