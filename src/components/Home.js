@@ -13,27 +13,24 @@ function Home() {
           fetch(`http://24.199.104.72/api/listings/${id}`)
           .then((res)=>{ return res.json()})
           .then(response=>{
-           if(response.status==true){
-              setList(response.data)
-              // console.log(list)
-           }if(response.status===false){
-            setList([])
+           if(response.message==="No Listing with this ID exists"){
+              
+            fetch(`http://24.199.104.72/api/user-requests/${id}`)
+            .then((res)=>{ return res.json()})
+            .then(response2=>{
+             if(response2.message==="No User-Request with this ID exists"){
+              
+             }else{
+              setRequest(response2.data)
+             }
+            })
+           }else{
+            setList(response.data)
            }
           })
 
          },[])
-         useEffect(()=>{
-          
-          fetch(`http://24.199.104.72/api/user-requests/${id}`)
-          .then((res)=>{ return res.json()})
-          .then(response=>{
-           if(response.status===true){
-              setRequest(response.data)
-           }if(response.status==false){
-            setRequest([])
-           }
-          })
-         },[])
+         
      
 
         function handleClick(){
@@ -146,7 +143,7 @@ function Home() {
         </>
      );
     }
-     if(list.length!==0){
+     else{
       return (
         <>
         <section>
