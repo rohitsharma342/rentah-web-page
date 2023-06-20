@@ -13,7 +13,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/:id" element={<Home/>}></Route>
-          {/* <Route path="/listing:id" element={<Home2/>}></Route> */}
+          <Route path="/request/:id" element={<Home2/>}></Route>
         </Routes>
       </Router>
       </>

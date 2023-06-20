@@ -10,21 +10,15 @@ function Home2() {
          const[list,setList]=useState([])
          const[request,setRequest]=useState([])
 //console.log(id)
-         useEffect(()=>{
-        
-          fetch(`http://24.199.104.72/api/listings/${id}`)
-          .then((res)=>{ return res.json()})
-          .then(response=>{
-           if(response.status==true){
-            setList(response.data)
-           }if(response.status==false){
-            navigator('/listing')
-           }
-          })
-      
-          
-         
-         },[])
+useEffect(()=>{
+  fetch(`http://24.199.104.72/api/user-requests/${id}`)
+    .then((res)=>{ return res.json()})
+    .then(response2=>{
+    if(response2.status==true){
+      setRequest(response2.data)
+    }
+    })
+ },[])
          
      
 
@@ -54,92 +48,7 @@ function Home2() {
         
       
     //   if(request.length!==0){
-    // return (
-    //     <>
-    //     <section>
-    //     <div className='container'>
-    //       <div className='row'>
-    //       <Header/>
-    //         <div className='col-md-12'>
-              
-    //           <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
-    //             <div class="carousel-indicators">
-    //               <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-    //               <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-    //               <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
-    //             </div>
-    //             <div class="carousel-inner">
-    //               {request.listingPhotos?.map(i=>(
-    //                 <div class="carousel-item active">
-    //                 <img src={i} class="d-block w-100" alt="" />
-    //               </div>
-    //               ))}
-                  
-                 
-    //             </div>
-    //             <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-    //               <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-    //               <span class="visually-hidden">Previous</span>
-    //             </button>
-    //             <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-    //               <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    //               <span class="visually-hidden">Next</span>
-    //             </button>
-    //           </div>
-    //           <div className='rounded bg-grey mt-3'>
-    //             <h3>${request.budget}</h3>
-    //             <p className='float-end' style={{ marginTop : "-40px" }}><i class="bi bi-geo-alt-fill"></i>{request.user?.city},{request.user?.state}</p>
-    //             <p>Selling My {request.title}</p>
-    //             <hr />
-    //             <h2>Description</h2>
-    //             <p>{request.description}</p>
-    //             <hr />
-    //             <h3><i class="bi bi-exclamation-octagon-fill"></i> In Case Of Damage</h3>
-    //             <p>{request.damageClause}</p>
-    //             <h3><i class="bi bi-clipboard2-data-fill"></i> Return Policy</h3>
-    //             <p>{request.returnPolicy}</p>
-    //             <button className='btn btn-success form-control rounded' data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={handleClick}>I'm Intrested</button>
-    //             <GoogleMapC
-                
-    //             />
-    //             <hr />
-    //             <div className="mb-5">
-    //               <img src={request.user?.profilePicture} className='profile-img' alt=""/>
-    //               <h5 style={{ marginLeft  : "120px", marginTop : "-65px" }}>Request By {request.user?.fullName}</h5>
-    //               <p style={{ marginLeft : "120px", marginTop : "0px" }}>Member Since 2018</p>
-    //             </div>
-    //           </div>
-    //           <div className="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    //             <div className="modal-dialog ">
-    //               <div className="modal-content">
-    //                 <div className="modal-header">
-    //                   <h5 className="modal-title" id="exampleModalLabel">Rentah</h5>
-    //                   <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-    //                 </div>
-                     
-    //                 <div className="modal-body">
-    //                   <img src='../rentah_logo.png' className='rentah-logo' alt=""/>
-    //                   <h3 className='text-center mt-3'>Thanks For Your Intrest</h3>
-    //                   <p className='text-center'>Please download Rentah app from App Store or Google play store for direct and kickstarting conversation.</p>
-    //                 </div>
-    //                 <div className="modal-footer">
-    //                   {os==="I" && <a href='https://www.apple.com/in/app-store'  className='form-control btn btn-success' >Continue</a>}
-    //                   {os==="A" && <a href="https://play.google.com/store/search?q=rentah&c=apps" className='form-control btn btn-success' >Continue</a>}
-    //                   {os==="W" && <a href="https://play.google.com/store/search?q=rentah&c=apps" className='form-control btn btn-success' >Continue</a>}
-                      
-    //                 </div>
-    //               </div>
-    //             </div>
-    //           </div>
-    //         </div>
-    //       </div>
-    //     </div>
-    //   </section>
-    //     </>
-    //  );
-    // }
-     
-      return (
+    return (
         <>
         <section>
         <div className='container'>
@@ -154,13 +63,13 @@ function Home2() {
                   <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
                 </div>
                 <div class="carousel-inner">
-                  {list.listingPhotos?.map(itm=>(
-
-                
-                  <div class="carousel-item active">
-                    <img src={itm} class="d-block w-100" alt="" />
+                  {request.listingPhotos?.map(i=>(
+                    <div class="carousel-item active">
+                    <img src={i} class="d-block w-100" alt="" />
                   </div>
-                    ))}
+                  ))}
+                  
+                 
                 </div>
                 <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
                   <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -172,35 +81,25 @@ function Home2() {
                 </button>
               </div>
               <div className='rounded bg-grey mt-3'>
-                {list.listingType===0?
-                <h3>${list.budget}/
-                </h3>
-                :
-                <h3>${list.budget}</h3>
-    }
-                <p className='float-end' style={{ marginTop : "-40px" }}><i class="bi bi-geo-alt-fill"></i> {list.user?.city},{list.user?.state}</p>
-                {list.listingType==0?
-                <p>Renting My {list.title}</p>
-                :
-                <p>Selling My {list.title}</p>
-                }
-                
+                <h3>${request.budget}</h3>
+                <p className='float-end' style={{ marginTop : "-40px" }}><i class="bi bi-geo-alt-fill"></i>{request.user?.city},{request.user?.state}</p>
+                <p>Selling My {request.title}</p>
                 <hr />
                 <h2>Description</h2>
-                <p>{list.description}</p>
+                <p>{request.description}</p>
                 <hr />
                 <h3><i class="bi bi-exclamation-octagon-fill"></i> In Case Of Damage</h3>
-                <p>{list.damageClause}</p>
+                <p>{request.damageClause}</p>
                 <h3><i class="bi bi-clipboard2-data-fill"></i> Return Policy</h3>
-                <p>{list.returnPolicy}</p>
+                <p>{request.returnPolicy}</p>
                 <button className='btn btn-success form-control rounded' data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={handleClick}>I'm Intrested</button>
                 <GoogleMapC
                 
                 />
                 <hr />
                 <div className="mb-5">
-                  <img src={list.user?.profilePicture} className='profile-img'alt="" />
-                  <h5 style={{ marginLeft  : "120px", marginTop : "-65px" }}>Listed By {list.user?.fullName}</h5>
+                  <img src={request.user?.profilePicture} className='profile-img' alt=""/>
+                  <h5 style={{ marginLeft  : "120px", marginTop : "-65px" }}>Request By {request.user?.fullName}</h5>
                   <p style={{ marginLeft : "120px", marginTop : "0px" }}>Member Since 2018</p>
                 </div>
               </div>
@@ -232,6 +131,101 @@ function Home2() {
       </section>
         </>
      );
+   // }
+     
+    //   return (
+    //     <>
+    //     <section>
+    //     <div className='container'>
+    //       <div className='row'>
+    //       <Header/>
+    //         <div className='col-md-12'>
+              
+    //           <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+    //             <div class="carousel-indicators">
+    //               <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+    //               <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+    //               <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+    //             </div>
+    //             <div class="carousel-inner">
+    //               {list.listingPhotos?.map(itm=>(
+
+                
+    //               <div class="carousel-item active">
+    //                 <img src={itm} class="d-block w-100" alt="" />
+    //               </div>
+    //                 ))}
+    //             </div>
+    //             <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+    //               <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    //               <span class="visually-hidden">Previous</span>
+    //             </button>
+    //             <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+    //               <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    //               <span class="visually-hidden">Next</span>
+    //             </button>
+    //           </div>
+    //           <div className='rounded bg-grey mt-3'>
+    //             {list.listingType===0?
+    //             <h3>${list.budget}/
+    //             </h3>
+    //             :
+    //             <h3>${list.budget}</h3>
+    // }
+    //             <p className='float-end' style={{ marginTop : "-40px" }}><i class="bi bi-geo-alt-fill"></i> {list.user?.city},{list.user?.state}</p>
+    //             {list.listingType==0?
+    //             <p>Renting My {list.title}</p>
+    //             :
+    //             <p>Selling My {list.title}</p>
+    //             }
+                
+    //             <hr />
+    //             <h2>Description</h2>
+    //             <p>{list.description}</p>
+    //             <hr />
+    //             <h3><i class="bi bi-exclamation-octagon-fill"></i> In Case Of Damage</h3>
+    //             <p>{list.damageClause}</p>
+    //             <h3><i class="bi bi-clipboard2-data-fill"></i> Return Policy</h3>
+    //             <p>{list.returnPolicy}</p>
+    //             <button className='btn btn-success form-control rounded' data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={handleClick}>I'm Intrested</button>
+    //             <GoogleMapC
+                
+    //             />
+    //             <hr />
+    //             <div className="mb-5">
+    //               <img src={list.user?.profilePicture} className='profile-img'alt="" />
+    //               <h5 style={{ marginLeft  : "120px", marginTop : "-65px" }}>Listed By {list.user?.fullName}</h5>
+    //               <p style={{ marginLeft : "120px", marginTop : "0px" }}>Member Since 2018</p>
+    //             </div>
+    //           </div>
+    //           <div className="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    //             <div className="modal-dialog ">
+    //               <div className="modal-content">
+    //                 <div className="modal-header">
+    //                   <h5 className="modal-title" id="exampleModalLabel">Rentah</h5>
+    //                   <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    //                 </div>
+                     
+    //                 <div className="modal-body">
+    //                   <img src='../rentah_logo.png' className='rentah-logo' alt=""/>
+    //                   <h3 className='text-center mt-3'>Thanks For Your Intrest</h3>
+    //                   <p className='text-center'>Please download Rentah app from App Store or Google play store for direct and kickstarting conversation.</p>
+    //                 </div>
+    //                 <div className="modal-footer">
+    //                   {os==="I" && <a href='https://www.apple.com/in/app-store'  className='form-control btn btn-success' >Continue</a>}
+    //                   {os==="A" && <a href="https://play.google.com/store/search?q=rentah&c=apps" className='form-control btn btn-success' >Continue</a>}
+    //                   {os==="W" && <a href="https://play.google.com/store/search?q=rentah&c=apps" className='form-control btn btn-success' >Continue</a>}
+                      
+    //                 </div>
+    //               </div>
+    //             </div>
+    //           </div>
+    //         </div>
+    //       </div>
+    //     </div>
+    //   </section>
+    //     </>
+    //  );
     
 }
 

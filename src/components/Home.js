@@ -11,31 +11,54 @@ function Home() {
          const[request,setRequest]=useState([])
 //console.log(id)
          useEffect(()=>{
-        
           fetch(`http://24.199.104.72/api/listings/${id}`)
           .then((res)=>{ return res.json()})
           .then(response=>{
            if(response.status==true){
             setList(response.data)
-           }if(response.status==false){
-            
+           }if(response.message==="No Listing with this ID exists"){
+        //     fetch(`http://24.199.104.72/api/user-requests/${id}`)
+        //  .then((res)=>{ return res.json()})
+        //  .then(response2=>{
+        //  if(response2.status===true){
+        //    setRequest(response2.data)
+        //  }
+        //  })
+        navigator(`/request/${id}`)
            }
           })
-      
-          fetch(`http://24.199.104.72/api/user-requests/${id}`)
-            .then((res)=>{ return res.json()})
-            .then(response2=>{
-            if(response2.status==true){
-              setRequest(response2.data)
-            }if(response2.status==false){
-             
-            }
-            })
-         
-         },[])
+         },[id])
+
+        //  useEffect(()=>{
+        //   fetch(`http://24.199.104.72/api/user-requests/${id}`)
+        //     .then((res)=>{ return res.json()})
+        //     .then(response2=>{
+        //     if(response2.status==true){
+        //       setRequest(response2.data)
+        //     }if(response2.status==false){
+        //       // fetch(`http://24.199.104.72/api/listings/${id}`)
+        //       // .then((res)=>{ return res.json()})
+        //       // .then(response=>{
+        //       //  if(response.status==true){
+        //       //   setList(response.data)
+        //       //  }if(response.status==false){
+                
+        //       //  }
+        //       // })
+        //     }
+        //     })
+        //  },[id])
          
      
-
+        //  fetch(`http://24.199.104.72/api/user-requests/${id}`)
+        //  .then((res)=>{ return res.json()})
+        //  .then(response2=>{
+        //  if(response2.status==true){
+        //    setRequest(response2.data)
+        //  }if(response2.status==false){
+          
+        //  }
+        //  })
         function handleClick(){
           // let userAgent= window.navigator.userAgent
           // let platform= window.navigator?.userAgentData?.platform
