@@ -13,7 +13,7 @@ function Home2() {
 function handleClick(){
   
   
-  var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+  var userAgent = (navigator.userAgent || navigator.vendor || window.opera);
   if (/windows phone/i.test(userAgent)) {
     setOs("W")
 }

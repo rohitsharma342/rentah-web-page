@@ -36,27 +36,19 @@ function Home() {
           if(platform=="Windows"){
             setOs("W")
         }
-         if(platform =="iPhone"){
-          setOs("I")
-        }
-         if(platform =="Android"){
-          setOs("A")
-        }
-
-
-          
-          
-          if (/Windows Phone/i.test(userAgent)) {
+         
+  
+          if (/windows Phone/i.test(userAgent)) {
             setOs("W")
             
         }
-        if (/Android/i.test(userAgent)) {
+        if (/android/i.test(userAgent)) {
           setOs("A")
       }
       if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
         setOs("I")
     }
-    if(/Windows/i.test(userAgent)){
+    if(/windows/i.test(userAgent)){
       setOs("W")
     }
    
