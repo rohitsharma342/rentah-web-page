@@ -11,7 +11,7 @@ function Home() {
          const[request,setRequest]=useState([])
 //console.log(id)
          useEffect(()=>{
-          fetch(`http://24.199.104.72/api/listings/${id}`)
+          fetch(`https://rentahapp.onrender.com/api/listings/${id}`)
           .then((res)=>{ return res.json()})
           .then(response=>{
            if(response.status==true){
