@@ -17,13 +17,6 @@ function Home() {
            if(response.status==true){
             setList(response.data)
            }if(response.message==="No Listing with this ID exists"){
-        //     fetch(`http://24.199.104.72/api/user-requests/${id}`)
-        //  .then((res)=>{ return res.json()})
-        //  .then(response2=>{
-        //  if(response2.status===true){
-        //    setRequest(response2.data)
-        //  }
-        //  })
         navigator(`/request/${id}`)
            }
           })
