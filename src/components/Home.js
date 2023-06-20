@@ -31,34 +31,34 @@ function Home() {
          function handleClick(){
           let userAgent1= window.navigator.userAgent
           let platform= window.navigator?.userAgentData?.platform
-          
+          let userAgent = navigator.userAgent || navigator.vendor || window.opera;
           
           if(platform=="Windows"){
             setOs("W")
         }
-        else if(platform =="iPhone"){
+         if(platform =="iPhone"){
           setOs("I")
         }
-        else if(platform =="Android"){
+         if(platform =="Android"){
           setOs("A")
         }
 
 
-    //       let userAgent = navigator.userAgent || navigator.vendor || window.opera;
           
-    //       if (/Windows Phone/i.test(userAgent)) {
-    //         setOs("W")
+          
+          if (/Windows Phone/i.test(userAgent)) {
+            setOs("W")
             
-    //     }
-    //     if (/Android/i.test(userAgent)) {
-    //       setOs("A")
-    //   }
-    //   if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-    //     setOs("I")
-    // }
-    // if(/Windows/i.test(userAgent)){
-    //   setOs("W")
-    // }
+        }
+        if (/Android/i.test(userAgent)) {
+          setOs("A")
+      }
+      if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+        setOs("I")
+    }
+    if(/Windows/i.test(userAgent)){
+      setOs("W")
+    }
    
     
         }
