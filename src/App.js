@@ -4,6 +4,7 @@ import { BrowserRouter as Router ,Route ,Routes } from 'react-router-dom'
 // import GoogleMapC from "./GoogleMap"
 // import Header from "./components/Header"
 import Home from "./components/Home"
+import Home2 from './components/Home2';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/:id" element={<Home/>}></Route>
+          {/* <Route path="/listing:id" element={<Home2/>}></Route> */}
         </Routes>
       </Router>
       </>
