@@ -29,7 +29,7 @@ setOs("W")
 }
 
 useEffect(()=>{
-  fetch(`https://rentahapp.onrender.com/api/user-requests/${id}`)
+  fetch(`https://web.rentah.com/api/user-requests/${id}`)
     .then((res)=>{ return res.json()})
     .then(response2=>{
     if(response2.status==true){

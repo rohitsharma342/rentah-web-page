@@ -1,52 +1,53 @@
-import React, { Fragment } from "react";
-import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
+import React from "react";
+import { GoogleMap, useJsApiLoader, Circle,Marker  } from "@react-google-maps/api";
+
 const containerStyle = {
-  width : '100%',
-  height : '600px',
-  marginTop : '20px',
- 
+  width: "100%",
+  height: "200px",
+  marginTop: "20px",
 };
 
-const center = {
-  lat: 	26.922070,
-  lng: 75.778885
+
+
+const circleOptions = {
+  strokeColor: "green", // Adjust stroke color as needed
+  strokeOpacity: 0.8,
+  strokeWeight: 2,
+  fillColor: "green", // Adjust fill color as needed
+  fillOpacity: 0.35,
+  clickable: false,
+  draggable: false,
+  editable: false,
+  visible: true,
+  radius: 1000, // in meters
 };
-function GoogleMapC() {
-    const { isLoaded } = useJsApiLoader({
-        id: 'google-map-script',
-        googleMapsApiKey: "AIzaSyCu_iJ7k3FD95uLMmOHiZMRYECHZdWgFq8"  //need to define your google api key 
-      })
-      const [map, setMap] = React.useState(null)
 
-  const onLoad = React.useCallback(function callback(map) {
-    const bounds = new window.google.maps.LatLngBounds(center);
-    map.fitBounds(bounds);
-    setMap(map)
-  }, [])
+function GoogleMapC(props) {
+  const { isLoaded } = useJsApiLoader({
+    id: "google-map-script",
+    googleMapsApiKey: "AIzaSyCBOSXzH5COCV1vK-Zlau9oQwbt3sPawao", // Replace with your actual API key
+  });
+  const center = {
+    lat: props.latitude, // Latitude of your default location
+    lng: props.longitude, // Longitude of your default location
+  };
+  return isLoaded ? (
+    <GoogleMap
+      id="map-container"
+      
+      mapContainerStyle={containerStyle}
+      center={center}
+      zoom={15} // Adjust the zoom level as needed
+    >
+      {/* Circle overlay */}
+      <Circle center={center} options={circleOptions} />
 
-  const onUnmount = React.useCallback(function callback(map) {
-    setMap(null)
-  }, [])
-    return ( 
-        <div style={{position:'relative'}}>
-    {isLoaded ? <GoogleMap
-    id="map-container"
-    center={center}
-    zoom={10}
-    onLoad={onLoad}
-    onUnmount={onUnmount}
-  >
-    { /* Child components, such as markers, info windows, etc. */ }
-    <></>
-  </GoogleMap>
-  :<></>
-    }
-
-  </div>
-
-  
-
-     );
+      {/* Marker for the default location */}
+      <Marker position={center} />
+    </GoogleMap>
+  ) : (
+    <div>Loading...</div>
+  );
 }
 
 export default GoogleMapC;
