@@ -1,351 +1,467 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-// import GoogleMap from "../GoogleMap"
+import { PLAY_STORE_URL, openRentahApp } from "../openRentahApp";
+import { usePageMeta } from "../usePageMeta";
 import GoogleMapC from "../GoogleMap";
-import Header from "../components/Header";
+import "./ListingPage.css";
+
+function getPeriodLabel(listingType) {
+  if (listingType === 0) return "/ day";
+  if (listingType === 1) return "/ week";
+  if (listingType === 2) return "/ month";
+  return "";
+}
+
+function formatPrice(budget) {
+  const amount = Number(budget);
+  if (Number.isNaN(amount)) return budget ? `$${budget}` : "";
+  return `$${amount.toFixed(2)}`;
+}
+
+function formatTitle(list) {
+  if (!list?.title) return "";
+  const prefix = list.listingType === 0 ? "Renting My" : "Selling My";
+  const title = String(list.title).trim();
+  const full = `${prefix} ${title}`;
+  return /[.!?]$/.test(full) ? full : `${full}.`;
+}
+
+function getCategoryLabel(list) {
+  const raw = list?.category ?? list?.categoryType ?? list?.type;
+  if (raw === 0 || raw === "0") return "Goods";
+  if (raw === 1 || raw === "1") return "Services";
+  if (raw === 2 || raw === "2") return "Spaces";
+  if (typeof raw === "string" && raw.trim()) return raw;
+  return list?.listingType === 3 ? "For sale" : "Services";
+}
+
+function photoUrl(item) {
+  if (!item) return "";
+  if (typeof item === "string") return item;
+  return item.url || item.uri || item.image || item.photo || "";
+}
+
+function PhotoTile({ src, alt, className, children, onClick }) {
+  return (
+    <div
+      className={className}
+      onClick={onClick}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") onClick?.();
+      }}
+      role="button"
+      tabIndex={0}
+    >
+      {src ? <img src={src} alt={alt} /> : null}
+      {children}
+    </div>
+  );
+}
+
 function Home() {
-  let navigator = useNavigate();
+  const navigator = useNavigate();
   const { id } = useParams();
-  const [os, setOs] = useState("");
-  const [list, setList] = useState([]);
-  // const[request,setRequest]=useState([])
+  const [list, setList] = useState(null);
+  const [photoIndex, setPhotoIndex] = useState(0);
+  const [touchStart, setTouchStart] = useState(null);
+  const [showBanner, setShowBanner] = useState(true);
+  const [showAllPhotos, setShowAllPhotos] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpandedDamage, setIsExpandedDamage] = useState(false);
+  const [isExpandedReturn, setIsExpandedReturn] = useState(false);
 
-  console.log(os);
-
-  //console.log(id)
   useEffect(() => {
     fetch(`https://web.rentah.com/api/listings/${id}`)
-      .then((res) => {
-        return res.json();
-      })
+      .then((res) => res.json())
       .then((response) => {
-        if (response.status == true) {
+        if (response.status === true) {
           setList(response.data);
+          setPhotoIndex(0);
         }
         if (response.message === "No Listing with this ID exists") {
           navigator(`/request/${id}`);
         }
       });
-  }, []);
-  // const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-  // const isAndroid = /android/i.test(navigator.userAgent);
-   const appScheme = 'https://web.rentah.com';
-  // const appStoreURL = 'https://apps.apple.com/in/app/rentah/id1668164022'; // iOS App Store URL
-  // const playStoreURL = 'https://play.google.com/store/apps/details?id=com.app.rentah&pcampaignid=web_share'; // Android Play Store URL
-  
-  // const appScheme = 'yourapp://'; // Custom scheme for your app
-const appStoreURL = 'https://apps.apple.com/in/app/rentah/id1668164022'; // iOS App Store URL
-const playStoreURL = 'https://play.google.com/store/apps/details?id=com.app.rentah&pcampaignid=web_share'; // Android Play Store URL
+  }, [id, navigator]);
 
-function getOS() {
-  const userAgent = window.navigator.userAgent;
-  const platform = window.navigator?.userAgentData?.platform || window.navigator.platform;
-  const macosPlatforms = ['macOS', 'Macintosh', 'MacIntel', 'MacPPC', 'Mac68K'];
-  const windowsPlatforms = ['Win32', 'Win64', 'Windows', 'WinCE'];
-  const iosPlatforms = ['iPhone', 'iPad', 'iPod'];
-  
-  if (macosPlatforms.includes(platform)) {
-    return 'Mac OS';
-  } else if (iosPlatforms.includes(platform)) {
-    return 'iOS';
-  } else if (windowsPlatforms.includes(platform)) {
-    return 'Windows';
-  } else if (/Android/.test(userAgent)) {
-    return 'Android';
-  } else if (/Linux/.test(platform)) {
-    return 'Linux';
+  function openListingInApp() {
+    openRentahApp({ type: "listing", id });
   }
-  return null;
-}
 
-function handleClick() {
-  const os = getOS();
-  let url =id
-  if (os === 'iOS') {
-    // Attempt to open the app using the custom scheme
-    const timeout = setTimeout(() => {
-      window.location.href = appStoreURL; // Redirect to App Store if the app is not installed
-    }, 1000); // Delay of 1000 milliseconds
-
-    window.location.href = `${appScheme}?id=${encodeURIComponent(url)}&isListing=true`; // Attempt to open the app
-    window.addEventListener('blur', () => clearTimeout(timeout)); // Clear timeout if the app opens
-  } else if (os === 'Android') {
-    // Attempt to open the app using the custom scheme
-    const timeout = setTimeout(() => {
-      window.location.href = playStoreURL; // Redirect to Play Store if the app is not installed
-    }, 1000); // Delay of 1000 milliseconds
-
-    window.location.href = `${appScheme}?id=${encodeURIComponent(url)}&isListing=true`; // Attempt to open the app
-    window.addEventListener('blur', () => clearTimeout(timeout)); // Clear timeout if the app opens
-  } else {
-    alert('Please open this on a mobile device.');  
+  function openAppStore() {
+    openRentahApp();
   }
-}
 
-  
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [isExpandedDamage, setIsExpandedDamage] = useState(false);
-  const [isExpandedReturn, setIsExpandedReturn] = useState(false);
-  const toggleDescription = () => {
-    setIsExpanded(!isExpanded);
+  const photos = useMemo(
+    () => (list?.listingPhotos || []).map(photoUrl).filter(Boolean),
+    [list]
+  );
+  const currentPhoto = photos[photoIndex];
+  usePageMeta({
+    title: list?.title || "Rentah",
+    image: photos[0] || "",
+  });
+  const locationLabel = list?.location
+    ? String(list.location)
+        .split(",")
+        .map((part) => part.trim())
+        .filter(Boolean)
+        .join(", ")
+    : [list?.user?.city || list?.city, list?.user?.state || list?.state]
+        .filter(Boolean)
+        .join(", ");
+  const description = list?.description || "";
+  const canTruncate = description.length > 70;
+  const memberYear = list?.user?.createdAt
+    ? new Date(list.user.createdAt).getFullYear()
+    : "2018";
+  const listingCount =
+    list?.user?.listingsCount ??
+    list?.user?.totalListings ??
+    list?.user?.listingCount;
+  const isVerified =
+    list?.user?.isVerified ?? list?.user?.verified ?? list?.user?.is_verified;
+  const category = getCategoryLabel(list);
+  const latitude = Number(list?.latitude);
+  const longitude = Number(list?.longitude);
+  const hasCoords =
+    Number.isFinite(latitude) &&
+    Number.isFinite(longitude) &&
+    !(latitude === 0 && longitude === 0);
+  const qrSrc = `https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${encodeURIComponent(
+    PLAY_STORE_URL
+  )}`;
+
+  const goToPhoto = (nextIndex) => {
+    if (!photos.length) return;
+    const wrapped = (nextIndex + photos.length) % photos.length;
+    setPhotoIndex(wrapped);
   };
-  const toggleDescriptionDamage = () => {
-    setIsExpandedDamage(!isExpandedDamage);
+
+  const openPhoto = (index) => {
+    if (!photos.length) return;
+    setPhotoIndex(index);
+    setShowAllPhotos(true);
   };
-  const toggleDescriptionReturn = () => {
-    setIsExpandedReturn(!isExpandedReturn);
-  };
-  return (
+
+  const providerBlock = list?.user ? (
+    <Link to={`/user/${list.user._id}`} className="listing-provider">
+      {list.user.profilePicture ? (
+        <img src={list.user.profilePicture} alt="" className="listing-avatar" />
+      ) : (
+        <div className="listing-avatar-fallback">avatar</div>
+      )}
+      <div className="listing-provider-copy">
+        <p className="listing-provider-name">{list.user.fullName}</p>
+        <p className="listing-provider-meta">
+          Member since {memberYear}
+          {listingCount != null ? ` · ${listingCount} listings` : ""}
+        </p>
+      </div>
+      {isVerified !== false && <span className="listing-verified">Verified</span>}
+    </Link>
+  ) : null;
+
+  const aboutBlock = (
     <>
-      <section>
-        <div className="container-fluid">
-          <div className="row">
-            {/* <Header/> */}
-            <div className="col-md-12 mt-3">
-              <div
-                id="carouselExampleIndicators"
-                style={{ zIndex: "-1000" }}
-                class="carousel slide sticky-top"
-                data-bs-ride="carousel"
-              >
-                <div className="carousel-indicators">
-                  <button
-                    type="button"
-                    data-bs-target="#carouselExampleIndicators"
-                    data-bs-slide-to="0"
-                    className="active"
-                    aria-current="true"
-                    aria-label="Slide 1"
-                  ></button>
-                  <button
-                    type="button"
-                    data-bs-target="#carouselExampleIndicators"
-                    data-bs-slide-to="1"
-                    aria-label="Slide 2"
-                  ></button>
-                  <button
-                    type="button"
-                    data-bs-target="#carouselExampleIndicators"
-                    data-bs-slide-to="2"
-                    aria-label="Slide 3"
-                  ></button>
-                </div>
-                <div className="carousel-inner">
-                  {list.listingPhotos?.map((itm) => (
-                    <div className="carousel-item active">
-                      <img src={itm} loading="lazy" className="d-block "  style={{height:"200px"}}  alt="" />
-                    </div>
-                  ))}
-                </div>
-                <button
-                  className="carousel-control-prev"
-                  type="button"
-                  data-bs-target="#carouselExampleIndicators"
-                  data-bs-slide="prev"
-                >
-                  <span
-                    className="carousel-control-prev-icon"
-                    aria-hidden="true"
-                  ></span>
-                  <span className="visually-hidden">Previous</span>
-                </button>
-                <button
-                  className="carousel-control-next"
-                  type="button"
-                  data-bs-target="#carouselExampleIndicators"
-                  data-bs-slide="next"
-                >
-                  <span
-                    className="carousel-control-next-icon"
-                    aria-hidden="true"
-                  ></span>
-                  <span className="visually-hidden">Next</span>
-                </button>
-              </div>
-              <div
-                className=" pt-3 mt-3 bg-light px-2"
-                style={{ borderRadius: "18px" }}
-              >
-                {list.listingType === 0 && <h4>${list.budget}/Day</h4>}
-                {list.listingType === 1 && <h4>${list.budget}/Week</h4>}
-                {list.listingType === 2 && <h4>${list.budget}/Month</h4>}
-                {list.listingType === 3 && <h4>${list.budget}/For Sale</h4>}
-
-                <p
-                  className="float-end"
-                  style={{ marginTop: "-40px", fontSize: "13px" }}
-                >
-                  <i class="bi bi-geo-alt-fill"></i> {list.user?.city},
-                  {list.user?.state}
-                </p>
-                {list.listingType == 0 ? (
-                  <h6>Renting My {list.title}</h6>
-                ) : (
-                  <h6>Selling My {list.title}</h6>
-                )}
-
-                <hr />
-                {/* <h4 >Description</h4> */}
-      <p style={{ fontSize: '16px' }}>
-        {list.description 
-          ? (isExpanded ? list.description : `${list.description.substring(0, 150)}...`)
-          : 'No description available'}
+      <p className="listing-kicker">About this listing</p>
+      <p className="listing-copy">
+        {description
+          ? isExpanded || !canTruncate
+            ? description
+            : `${description.substring(0, 70).trim()}...`
+          : "No description available"}
       </p>
-      {list.description && (
-        <h6 style={{ fontSize: '13px',color:"#179778",textDecoration:"underline" }} onClick={toggleDescription}>
-          {isExpanded ? 'Show Less' : 'Read More'}
-        </h6>
+      {description && (
+        <button
+          type="button"
+          className="listing-read-more"
+          onClick={() => setIsExpanded((open) => !open)}
+        >
+          {isExpanded ? "Show less" : "Read more"}
+        </button>
       )}
-                <hr />
-                <div className="mb-0 d-flex gap-3 align-items-center">
-                  <img
-                    src={list.user?.profilePicture}
-                    className="profile-img"
-                    alt=""
-                  />
-                  <div className="mt-3">
-                  <h5 style={{fontSize:"18px"}}>
-                    Listed By {list.user?.fullName}
-                  </h5>
-                  <p >
-                    Member Since 2018
-                  </p>
-                  </div>
-                </div>
-                <hr/>
-                <button
-                  className="btn mb-3 form-control mt-2 pt-2 pb-2 "
-                  style={{
-                    background: "#179778",
-                    borderRadius: "10px",
-                    color: "white",
-                    fontSize:"20px"
-                    // margin:"10px"
+    </>
+  );
+
+  const knowBlock = (
+    <div className="listing-know">
+      <p className="listing-kicker">Good to know</p>
+      <div className="listing-accordion">
+        <div className="listing-accordion-item">
+          <button
+            type="button"
+            className="listing-accordion-btn"
+            onClick={() => setIsExpandedDamage((open) => !open)}
+          >
+            In case of damage
+            <span className="listing-accordion-icon">
+              {isExpandedDamage ? "−" : "+"}
+            </span>
+          </button>
+          {isExpandedDamage && (
+            <div className="listing-accordion-panel">
+              {list?.damageClause || "No damage clause available"}
+            </div>
+          )}
+        </div>
+        <div className="listing-accordion-item">
+          <button
+            type="button"
+            className="listing-accordion-btn"
+            onClick={() => setIsExpandedReturn((open) => !open)}
+          >
+            Return policy
+            <span className="listing-accordion-icon">
+              {isExpandedReturn ? "−" : "+"}
+            </span>
+          </button>
+          {isExpandedReturn && (
+            <div className="listing-accordion-panel">
+              {list?.returnPolicy || "No return policy available"}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+
+  const whereBlock = (
+    <div className="listing-where">
+      <p className="listing-kicker">Where</p>
+      <div className="listing-map">
+        {hasCoords ? (
+          <GoogleMapC
+            latitude={latitude}
+            longitude={longitude}
+            height="180px"
+            marginTop={0}
+            borderRadius="18px"
+            zoom={13}
+            showCircle={false}
+            gestureHandling="none"
+          />
+        ) : null}
+      </div>
+      <p className="listing-map-note">
+        Exact location shared after the provider accepts.
+      </p>
+    </div>
+  );
+
+  const priceCard = (
+    <aside className="listing-card">
+      <div className="listing-price">
+        <span className="listing-price-amount">{formatPrice(list?.budget)}</span>
+        {getPeriodLabel(list?.listingType) && (
+          <span className="listing-price-period">
+            {getPeriodLabel(list?.listingType)}
+          </span>
+        )}
+      </div>
+      <p className="listing-card-copy">
+        Messaging, booking and payment happen in the Rentah app.
+      </p>
+      <button type="button" className="listing-cta" onClick={openListingInApp}>
+        Open in the Rentah app
+      </button>
+      <div className="listing-qr-row">
+        <img src={qrSrc} alt="Download Rentah" className="listing-qr" />
+        <p>Scan to install Rentah, then pick up right where you left off.</p>
+      </div>
+      <p className="listing-card-meta">Free to list · 5% on rentals</p>
+      <p className="listing-card-meta">Verified profiles and in-app chat</p>
+    </aside>
+  );
+
+  return (
+    <div className="listing-page">
+      {showBanner && (
+        <>
+          <div className="listing-promo">
+            <p className="listing-promo-text">
+              Just Rent It. — goods, services & spaces nearby
+            </p>
+            <div className="listing-promo-actions">
+              <button
+                type="button"
+                className="listing-get-app"
+                onClick={openAppStore}
+              >
+                Get the app
+              </button>
+              <button
+                type="button"
+                className="listing-close"
+                aria-label="Dismiss banner"
+                onClick={() => setShowBanner(false)}
+              >
+                ×
+              </button>
+            </div>
+          </div>
+          <header className="listing-topbar">
+            <div className="listing-mark">
+              <img src="/rentah_logo.png" alt="" />
+            </div>
+            <div className="listing-topbar-copy">
+              <p className="listing-topbar-title">Rentah</p>
+              <p className="listing-topbar-sub">
+                Just Rent It - goods, services & spaces nearby
+              </p>
+            </div>
+            <button
+              type="button"
+              className="listing-get-app"
+              onClick={openAppStore}
+            >
+              Get app
+            </button>
+            <button
+              type="button"
+              className="listing-close"
+              aria-label="Dismiss banner"
+              onClick={() => setShowBanner(false)}
+            >
+              ×
+            </button>
+          </header>
+        </>
+      )}
+
+      <div className="listing-shell">
+        <div className="listing-gallery">
+          <PhotoTile
+            className="listing-gallery-hero"
+            src={photos[0]}
+            alt={list?.title || "Listing photo"}
+            onClick={() => openPhoto(0)}
+          />
+          <div className="listing-gallery-side">
+            <PhotoTile
+              className="listing-gallery-tile"
+              src={photos[1] || photos[0]}
+              alt="Listing photo 2"
+              onClick={() => openPhoto(photos[1] ? 1 : 0)}
+            />
+            <PhotoTile
+              className="listing-gallery-tile"
+              src={photos[2] || photos[1] || photos[0]}
+              alt="Listing photo 3"
+              onClick={() =>
+                openPhoto(photos[2] ? 2 : photos[1] ? 1 : 0)
+              }
+            >
+              {photos.length > 0 && (
+                <span
+                  className="listing-all-photos"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowAllPhotos(true);
                   }}
-                  data-bs-toggle=""
-                  data-bs-target=""
-                  onClick={handleClick}
                 >
-                  I'm Interested
-                </button>
-                <h4 style={{ fontSize: '15px' }}>
-                  <i class="bi bi-exclamation-octagon-fill"></i> In Case Of
-                  Damage
-                </h4>
-                <p style={{ fontSize: '13px' }}>
-        {list.damageClause 
-          ? (isExpandedDamage ? list.damageClause : `${list.damageClause.substring(0, 100)}...`)
-          : 'No damageClause available'}
-      </p>
-      {list.damageClause && (
-        <h6 style={{ fontSize: '13px',color:"#179778",textDecoration:"underline" }} onClick={toggleDescriptionDamage}>
-          {isExpandedDamage ? 'Show Less' : 'Read More'}
-        </h6>
-      )}
-           <hr />
-                <h4 style={{ fontSize: '15px', }}>
-                  <i class="bi bi-clipboard2-data-fill"></i> Return Policy
-                </h4>
-                <p style={{ fontSize: '13px' }}>
-        {list.returnPolicy 
-          ? (isExpandedReturn ? list.returnPolicy : `${list.returnPolicy.substring(0, 100)}...`)
-          : 'No returnPolicy available'}
-      </p>
-      {list.returnPolicy && (
-        <h6 style={{ fontSize: '13px',color:"#179778",textDecoration:"underline" }} onClick={toggleDescriptionReturn}>
-          {isExpandedReturn ? 'Show Less' : 'Read More'}
-        </h6>
-      )}
-                {/* <button
-                  className="btn  form-control mt-2  "
-                  style={{
-                    background: "#179778",
-                    borderRadius: "10px",
-                    color: "white",
-                    // margin:"10px"
-                  }}
-                  data-bs-toggle="modal"
-                  data-bs-target="#exampleModal"
-                  onClick={handleClick}
-                >
-                  I'm Interested
-                </button> */}
-                <GoogleMapC latitude={list.latitude} longitude={list.longitude} />
-                <hr />
-                {/* <div className="mb-5">
-                  <img
-                    src={list.user?.profilePicture}
-                    className="profile-img"
-                    alt=""
-                  />
-                  <h5 >
-                    Listed By {list.user?.fullName}
-                  </h5>
-                  <p style={{ marginLeft: "120px", marginTop: "0px" }}>
-                    Member Since 2018
-                  </p>
-                </div> */}
-              </div>
-              <div
-                className="modal fade"
-                id="exampleModal"
-                tabindex="-1"
-                aria-labelledby="exampleModalLabel"
-                aria-hidden="true"
-              >
-                <div className="modal-dialog ">
-                  <div className="modal-content">
-                    <div className="modal-header">
-                      <h5 className="modal-title" id="exampleModalLabel">
-                        Rentah
-                      </h5>
-                      <button
-                        type="button"
-                        className="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"
-                      ></button>
-                    </div>
+                  All photos
+                </span>
+              )}
+            </PhotoTile>
+          </div>
+        </div>
 
-                    <div className="modal-body">
-                      <img
-                        src="../rentah_logo.png"
-                        className="rentah-logo"
-                        alt=""
-                      />
-                      <h3 className="text-center mt-3">
-                        Thanks For Your Interest
-                      </h3>
-                      <p className="text-center">
-                        Please download Rentah app from App Store or Google play
-                        store for direct and kickstarting conversation.
-                      </p>
-                    </div>
-                    <div className="modal-footer ">
-                      <a
-                        href="hhttps://apps.apple.com/in/app/rentah/id1668164022"
-                        className="form-control btn btn-success"
-                      >
-                        App Store
-                      </a>
-                      <a
-                        href="https://play.google.com/store/apps/details?id=com.app.rentah"
-                        className="form-control btn btn-success"
-                      >
-                        Play Store
-                      </a>
-                      {/* {os==="I" && <a href='https://www.apple.com/in/app-store'  className='form-control btn btn-success' >Continue</a>}
-                      {os==="A" && <a href="https://play.google.com/store/search?q=rentah&c=apps" className='form-control btn btn-success' >Continue</a>}
-                      {os==="W" && <a href="https://play.google.com/store/search?q=rentah&c=apps" className='form-control btn btn-success' >Continue</a>} */}
-                    </div>
-                  </div>
-                </div>
-              </div>
+        <div
+          className="listing-hero"
+          onTouchStart={(e) => setTouchStart(e.touches[0].clientX)}
+          onTouchEnd={(e) => {
+            if (touchStart == null) return;
+            const dx = e.changedTouches[0].clientX - touchStart;
+            if (dx > 40) goToPhoto(photoIndex - 1);
+            if (dx < -40) goToPhoto(photoIndex + 1);
+            setTouchStart(null);
+          }}
+        >
+          {currentPhoto && (
+            <img
+              src={currentPhoto}
+              alt={list?.title || "Listing"}
+              className="listing-hero-img"
+            />
+          )}
+          <span className="listing-badge">{category}</span>
+          {(photos.length > 1 || photos.length === 0) && (
+            <div className="listing-dots">
+              {(photos.length ? photos : [0, 1, 2]).map((_, index) => (
+                <button
+                  key={index}
+                  type="button"
+                  className={`listing-dot${index === photoIndex ? " is-active" : ""}`}
+                  aria-label={`Show photo ${index + 1}`}
+                  onClick={() => photos.length && setPhotoIndex(index)}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+
+        <div className="listing-layout">
+          <div className="listing-body">
+            <h1 className="listing-title">{formatTitle(list) || "Listing"}</h1>
+            <div className="listing-price listing-price-mobile">
+              <span className="listing-price-amount">
+                {formatPrice(list?.budget)}
+              </span>
+              {getPeriodLabel(list?.listingType) && (
+                <span className="listing-price-period">
+                  {getPeriodLabel(list?.listingType)}
+                </span>
+              )}
+            </div>
+            <div className="listing-chips">
+              <span className="listing-chip listing-chip-category">{category}</span>
+              {locationLabel && (
+                <span className="listing-chip">{locationLabel}</span>
+              )}
+              <span className="listing-chip">Available now</span>
+            </div>
+            {aboutBlock}
+            {providerBlock}
+            {knowBlock}
+            {whereBlock}
+          </div>
+          {priceCard}
+        </div>
+
+        <div className="listing-cta-bar">
+          <button type="button" className="listing-cta" onClick={openListingInApp}>
+            Open in the Rentah app
+          </button>
+        </div>
+      </div>
+
+      {showAllPhotos && (
+        <div
+          className="listing-lightbox"
+          onClick={() => setShowAllPhotos(false)}
+        >
+          <div
+            className="listing-lightbox-panel"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              type="button"
+              className="listing-lightbox-close"
+              onClick={() => setShowAllPhotos(false)}
+            >
+              ×
+            </button>
+            <div className="listing-lightbox-grid">
+              {photos.map((photo, index) => (
+                <img key={photo + index} src={photo} alt={`Listing ${index + 1}`} />
+              ))}
             </div>
           </div>
         </div>
-      </section>
-    </>
+      )}
+    </div>
   );
 }
+
 export default Home;
