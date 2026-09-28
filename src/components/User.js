@@ -46,7 +46,8 @@ function User() {
   }, [userId]);
 
   function openChatInApp() {
-    openRentahApp({ type: "chat", id: userId });
+    if (!userId) return;
+    openRentahApp({ type: "user", id: userId });
   }
 
   function openAppStore() {

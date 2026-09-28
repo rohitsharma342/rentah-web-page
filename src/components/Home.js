@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { PLAY_STORE_URL, openRentahApp } from "../openRentahApp";
+import { trackDeepLinkEvent } from "../deepLink/analytics";
 import { usePageMeta } from "../usePageMeta";
 import GoogleMapC from "../GoogleMap";
 import "./ListingPage.css";
@@ -85,7 +86,12 @@ function Home() {
   }, [id, navigator]);
 
   function openListingInApp() {
-    openRentahApp({ type: "listing", id });
+    if (!id) return;
+    trackDeepLinkEvent("interested_button_clicked", {
+      product_id: id,
+      source: "listing_cta",
+    });
+    openRentahApp({ type: "product", id });
   }
 
   function openAppStore() {

@@ -13,9 +13,10 @@ function App() {
       <>
       <Router>
         <Routes>
-          <Route path="/:id"  element={<Home/>}></Route>
-          <Route path="/request/:id" element={<Home2/>}></Route>
-          <Route path="/user/:userId" element={<User/>}></Route>
+          <Route path="/product/:id" element={<Home />} />
+          <Route path="/request/:id" element={<Home2 />} />
+          <Route path="/user/:userId" element={<User />} />
+          <Route path="/:id" element={<Home />} />
         </Routes>
       </Router>
       </>

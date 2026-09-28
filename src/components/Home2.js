@@ -1,31 +1,42 @@
 import { useEffect, useState } from "react"
-import {  useParams,useNavigate } from 'react-router-dom'
+import {  useParams } from 'react-router-dom'
 // import GoogleMap from "../GoogleMap"
 import GoogleMapC from "../GoogleMap"
 import Header from "../components/Header"
+import { getOS } from "../openRentahApp"
+import { isMobileOs } from "../deepLink/config"
+import { openProductDeepLink } from "../deepLink/openProductDeepLink"
+import { trackDeepLinkEvent } from "../deepLink/analytics"
+
 function Home2() {
-    let navigator =useNavigate()
         const {id} =useParams()
         const [os,setOs] = useState("")
          //const[list,setList]=useState([])
          const[request,setRequest]=useState([])
+        const [interestedBusy, setInterestedBusy] = useState(false)
 //console.log(id)
-function handleClick(){
-  
-  
-  var userAgent = (navigator.userAgent || navigator.vendor || window.opera);
-  if (/windows phone/i.test(userAgent)) {
-    setOs("W")
-}
-if (/android/i.test(userAgent)) {
-  setOs("A")
-}
-if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-setOs("I")
-}
-if(/windows/i.test(userAgent)){
-setOs("W")
-}
+async function handleClick(){
+  if (interestedBusy || !id) return
+  setInterestedBusy(true)
+
+  const currentOs = getOS()
+  if (currentOs === "iOS") setOs("I")
+  else if (currentOs === "Android") setOs("A")
+  else setOs("W")
+
+  trackDeepLinkEvent("interested_button_clicked", {
+    product_id: id,
+    source: "request_interested",
+    platform: currentOs || "unknown",
+  })
+
+  try {
+    if (isMobileOs(currentOs)) {
+      await openProductDeepLink(id)
+    }
+  } finally {
+    window.setTimeout(() => setInterestedBusy(false), 800)
+  }
 }
 
 useEffect(()=>{
@@ -88,7 +99,13 @@ useEffect(()=>{
                 <p>{request.damageClause}</p>
                 <h3><i class="bi bi-clipboard2-data-fill"></i> Return Policy</h3>
                 <p>{request.returnPolicy}</p>
-                <button className='btn btn-success form-control rounded' data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={handleClick}>I'm Intrested</button>
+                <button
+                  className='btn btn-success form-control rounded'
+                  data-bs-toggle="modal"
+                  data-bs-target="#exampleModal"
+                  onClick={handleClick}
+                  disabled={interestedBusy}
+                >I'm Intrested</button>
                 <GoogleMapC
                 
                 />

@@ -23,7 +23,7 @@ const circleOptions = {
 function GoogleMapC(props) {
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
-    googleMapsApiKey: "AIzaSyCBOSXzH5COCV1vK-Zlau9oQwbt3sPawao",
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY || "",
   });
   const lat = Number(props.latitude);
   const lng = Number(props.longitude);
